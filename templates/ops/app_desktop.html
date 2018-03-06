@@ -1,0 +1,12 @@
+<div class="container" >
+    <tabs>
+    {% for nav in Navs %}
+      <tab header="{{nav.name}}" id="tab_{{nav.en}}">
+        <input type="hidden" data-type="{{nav.en}}" name="topurl" value="{{ nav.url }}">
+      {% with "appchild/"|add:nav.en|add:"-manage.html" as tp %}
+      {% include tp %}
+      {% endwith %}
+      </tab>
+    {% endfor %}
+    </tabs>
+</div>

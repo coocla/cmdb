@@ -1,0 +1,163 @@
+<div class="plat-sidebar">
+	<div id="srvtree" class="wstree">
+		
+	</div>
+</div>
+<div class="mainbar">
+	<div class="row">
+		<div class="col-xs-8">
+		    <div class="btn-group">
+		      <!-- <div v-for="cmd in srvcmds" class="srvbtn"> -->
+			    <button class="btn btn-default" v-for="cmd in srvcmds" @click="showp($event,cmd.uuid)" id="<%cmd.uuid%>_btn"><%cmd.name%></button>
+			    <modal v-for="cmd in srvcmds" id="<%common%>_<%cmd.uuid%>_manage" :showp.sync="platzooms[cmd.uuid]" effect="zoom">
+			        <div slot="modal-header" class="modal-header">
+			            <button type="button" class="modal-btn close" @click="closeplat($event,cmd.uuid)" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+			            <button type="button" class="modal-btn maxify" @click="maxplat($event,cmd.uuid)">
+			            <span  v-if="!platismax[cmd.uuid]" class="glyphicon glyphicon-unchecked"></span>
+			            <span v-if="platismax[cmd.uuid]" class="glyphicon glyphicon-modal-window"></span></button>
+			            <button type="button" class="modal-btn minify" @click="minplat($event,cmd.uuid)"><span  class="glyphicon glyphicon-minus"></span></button>
+			          <h4 class="modal-title">
+			              <b><%cmd.name%></b>
+			          </h4>
+			        </div>
+			        <div slot="modal-body" class="modal-body background-select">
+			        	<form class="form-horizontal" role="form" id="execmd">
+			        	    <div class="form-group">
+			        	        <label class="col-lg-4" for="id_name">单个步骤执行超时时间:</label> 
+			        	        <div class="col-lg-8">
+			        	        <input class="form-control" name="timeout" type="text" value="600">
+			        	        </div>
+			        	    </div>
+			        	    <div class="form-group">
+			        	    	<label class="col-lg-4">注入的变量</label>
+			        	    	<div class="col-lg-8">
+			        	    		<div class="envs" class="col-lg-12" v-for="it in envs"  style="margin-bottom: 10px;">
+				        	    		<div class="col-lg-4" style="padding:0;"><input class="key form-control" type="text"></div>
+										<div class="col-lg-1" style="text-align:center;font-size:20px;font-weight:blod;padding:0;">=</div>
+										<div class="col-lg-4" style="padding:0;"><input class="value form-control" type="text"></div>
+										<div class="col-lg-3" style="padding:0;">
+											<button type="button" style="float:left;" class="btn btn-primary" @click="addenvs()">
+												<i class="glyphicon glyphicon-plus"></i>
+											</button>
+											<button type="button" class="btn btn-danger" v-if="envs>1&&$index!=0"  @click="minusenvs()">
+												<i class="glyphicon glyphicon-minus"></i>
+											</button>	
+										</div>
+										<div class="clearfix"></div>
+			        	    		</div>
+			        	    	</div>
+			        	    </div>
+
+			        	    <div class="form-group">
+			        	    	<label class="col-lg-4">是否为定时任务</label>
+			        	    	<div class="col-lg-8">
+			        	    		<input type="radio" name="istimetask" value="1" @click="changetimeout(true,cmd.uuid)">是
+			        	    		<input type="radio" name="istimetask" checked="checked" value="0" @click="changetimeout(false,cmd.uuid)">否
+			        	    	</div>
+			        	    </div>
+							<div class="form-group" v-if="istimeout">
+								<label class="col-lg-4">时间表达式</label>
+								<div class="col-lg-8">
+									<input type="text" class="form-control" id="timecron" name="timecron">
+								</div>
+							</div>
+							<div class="form-group"  v-if="istimeout">
+								<label class="col-lg-4">任务名称</label>
+								<div class="col-lg-8">
+									<input type="text" class="form-control" name="name">
+								</div>
+							</div>
+
+			        	    <input type="button" @click="initcmd($event,cmd.uuid,'zone')" class="btn btn-primary" value="提交">
+			        	</form>
+			        </div>
+			    </modal>
+		      <!-- </div> -->
+	         <!--  <button class="btn btn-default">开服</button>
+	          <button class="btn btn-default">关服</button>
+	          <button class="btn btn-default">重启</button>
+	          <button class="btn btn-default">迁移</button>
+	          <button class="btn btn-default">合服</button>
+	          <button class="btn btn-default">装服</button>
+	          <button class="btn btn-default">数据库更新</button>
+	          <button class="btn btn-default">更新</button>
+	          <button class="btn btn-default">测试Salt</button>
+	          <button class="btn btn-default">开启防沉迷</button> -->
+	        </div>
+			
+		    <button class="btn <%ifall?'btn-info': 'btn-default'%>" @click="selectall()">
+		    	<span v-if="!ifall"><i class="glyphicon glyphicon-ok"></i>全选</span>
+		    	<span v-if="ifall"><i class="glyphicon glyphicon-remove"></i>取消全选</span>
+	    	</button>
+
+	        <button class="btn btn-default">更多</button>
+		</div>
+	    <div class="col-xs-4">
+	      <div class="col-md-12">
+	        <div class="input-group panel" style="padding-bottom:0px;">
+	           <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+	           <input type="text" class="form-control search-input" id="exampleInputAmount" placeholder="">
+	         </div>
+	      </div>
+	    </div>
+	</div>
+	<div class="row">
+		<div class="row-xs-12">
+			<div class="pull-right pagination">
+				<ul class="pagination" style="margin:0;">
+					<li class="page-pre" @click="loadpresrv()"><a href="javascript:void(0)">上一页</a></li>
+					<li v-for="p in pages" class="page-number <%current_page==p+1?'active' : ''%>" @click="loadpagesrv(p+1)"><a href="javascript:void(0)"><%p+1%></a></li>
+					<li class="page-next" @click="loadnextsrv()"><a href="javascript:void(0)">下一页</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-xs-12  customsrvtab">
+			<ul class="nav nav-tabs">
+				<li v-for="tab in tabs" class="<%$index==0?'active': ''%>" data-target="#<%tab.key%>" @click="loadtabsrv($event,tab)"><a><%tab.value%></a><i v-if="tab.key!='__all__'" @click="deleteregion(tab.key)" class="glyphicon glyphicon-remove"></i></li>
+				<li v-if="platcreateurls.createregion" class="addplus" @click="showp($event,'createregion')" id="createregion_btn"><i class="glyphicon glyphicon-plus"></i></li>
+			      <modal id="<%common%>_createregion_manage" :showp.sync="platzooms['createregion']" effect="zoom">
+			        <div slot="modal-header" class="modal-header">
+			            <button type="button" class="modal-btn close" @click="closeplat($event,'createregion')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+			            <button type="button" class="modal-btn maxify" @click="maxplat($event,'createregion')">
+			            <span  v-if="!platismax['createregion']" class="glyphicon glyphicon-unchecked"></span>
+			            <span v-if="platismax['createregion']" class="glyphicon glyphicon-modal-window"></span></button>
+			            <button type="button" class="modal-btn minify" @click="minplat($event,'createregion')"><span  class="glyphicon glyphicon-minus"></span></button>
+			          <h4 class="modal-title">
+			              <b>增加标签页</b>
+			          </h4>
+			        </div>
+			        <div slot="modal-body" class="modal-body background-select">
+			        </div>
+			      </modal>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active">
+					  <div class="col-xs-12">
+					      <ul class="srv-datas" id="srv-datas">
+					      	<li v-for="srv in srvs" @click="clickSrv($event,srv)" id="<%srv.uuid%>">
+					      		<div>
+									<i class="srv-status geting" v-if="!srv.health"></i>
+					      			<i class="srv-status success" v-if="srv.health&&srv.health==1"></i>
+									<i class="srv-status error" v-if="srv.health&&srv.health==2"></i>
+									<i class="srv-status" v-if="srv.health&&srv.health==3"></i>
+					      			<div v-if="srv.progress" class="progress progress-animated progress-striped">
+										  <div v-bind:style="{ width: srv.progress.width + '%' }" class="progress-bar progress-bar-success" data-percentage="100" ><%srv.progress.width%>%</div>
+									  </div>
+					      		<%srv.alias%></div>
+					      		<div class="datas-text">
+					      			<%srv.server.public_ip%>
+					      		</div>
+					      		<div class="progressd" v-if="srv.progress">
+					      			<p title="<%srv.progress.jobname%>:阶段-<%srv.progress.stepname%>"><%srv.progress.jobname%>:<small>阶段-</small> <%srv.progress.stepname%></p>
+					      		</div>
+					      	</li>
+					      </ul>
+					  </div>
+				</div>
+			</div>
+		</div>  
+	</div>
+</div>

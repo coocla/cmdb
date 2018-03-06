@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>运维协作平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    {% include "common/csslink.html" %}
+    <style>
+    </style>
+    <script src="{{STATIC_URL}}js/jquery.min.js"></script>
+    <script type="text/javascript">
+    document.all&&document.execCommand("BackgroundImageCache", false, true); 
+    </script>
+  </head>
+  <body>
+    <!--socket notify通知-->
+    <div class="widget <%show?'' : 'hiden'%>" id="notifyhandle">
+      <div class="widget-head">
+        <div class="pull-left">通知</div>
+        <div class="widget-icons pull-right"  @click="show=!show;">
+          <a href="#"><i class="glyphicon <%show?'glyphicon-chevron-down' : 'glyphicon-chevron-up'%>"></i></a> 
+        </div>  
+        <div class="clearfix"></div>
+      </div>
+      <div class="widget-content">
+        <input type="text" style="margin:5px 0;" v-model="seartext" class="form-control">
+        <div class="notifylist">
+            <table class="table table-striped table-bordered table-hover">
+                <tbody>
+                  <tr v-for="m in message | filterBy seartext in 'time' 'msg'">
+                    <td><%m.time%></td>
+                    <td><%m.msg%></td>
+                  </tr> 
+              </tbody>
+            </table>
+        </div>
+        
+      </div>
+    </div>
+    <!--树的右键-->
+    <div class="btn-group" id="treeright" style="position:fixed:z-index:9999;">
+      <ul class="dropdown-menu">
+        <li>
+          <a @click="show($event,'createpgroup')">创建平台组</a>
+          <modal id="createpgroupmodal" :show.sync="zoomModal['createpgroup']" effect="zoom" class="nofoot">
+            <div slot="modal-header" class="modal-header">
+              <button type="button" class="modal-btn close" @click="close($event,'createpgroup')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+              <button type="button" class="modal-btn maxify" @click="max($event,'createpgroup')"><span  v-if='!ismax["createpgroup"]' class="glyphicon glyphicon-unchecked"></span>
+              <span v-if="ismax['createpgroup']" class="glyphicon glyphicon-modal-window"></span></button>
+              <button type="button" class="modal-btn minify" @click="min($event,'createpgroup')"><span class="glyphicon glyphicon-minus"></span></button>
+              <h4 class="modal-title">
+                <b>创建平台组</b>
+              </h4>
+            </div>
+            <div slot="modal-body" class="modal-body background-select">
+              <form class="form">
+                <div class="form-group">
+                  
+                </div>
+              </form>
+            </div>
+          </modal>
+        </li>
+        <li id="refreshthistree"><a>刷新树</a></li>
+      </ul>
+      <modal id="updatepgroupmodal" :show.sync="zoomModal['updatepgroup']" effect="zoom" class="nofoot">
+        <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'updatepgroup')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'updatepgroup')"><span  v-if='!ismax["updatepgroup"]' class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['updatepgroup']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'updatepgroup')"><span class="glyphicon glyphicon-minus"></span></button>
+          <h4 class="modal-title">
+            <b>更新平台组</b>
+          </h4>
+        </div>
+        <div slot="modal-body" class="modal-body background-select">
+          <form class="form">
+            <div class="form-group">
+              
+            </div>
+          </form>
+        </div>
+      </modal>
+    </div>
+
+    <!--右键-->
+    <div class="btn-group" id="rightkey">
+      <ul class="dropdown-menu">
+        <li id="rightmodal">
+          <a @click="show($event,'back')">桌面背景</a>
+          <modal id="back_rightkey" :show.sync="zoomModal['back']" effect="zoom" class="nofoot">
+            <div slot="modal-header" class="modal-header">
+              <button type="button" class="modal-btn close" @click="close($event,'back')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+              <button type="button" class="modal-btn maxify" @click="max($event,'back')"><span  v-if='!ismax["back"]' class="glyphicon glyphicon-unchecked"></span>
+              <span v-if="ismax['back']" class="glyphicon glyphicon-modal-window"></span></button>
+              <button type="button" class="modal-btn minify" @click="min($event,'back')"><span class="glyphicon glyphicon-minus"></span></button>
+              <h4 class="modal-title">
+                <b>设置背景图片</b>
+              </h4>
+            </div>
+            <div slot="modal-body" class="modal-body background-select">
+              <img v-bind:src="im" v-for="im in bg.imgs" alt="..." v-bind:class="[bg.selected==$index?'selected':'']" class="img-thumbnail img-responsive" @click="setbg($event,$index)"/>
+            </div>
+          </modal>
+        </li>
+        <li class="menu"><a><i class="glyphicon glyphicon-play"></i>右键功能测试 </a>
+            <ul>
+              <li><a>多项测试</a></li>
+              <li><a>多项测试</a></li>
+              <li><a>多项测试</a></li>
+              <li><a>多项测试</a></li>
+            </ul>
+        </li>
+        <li><a @click="show($event,'createtab','organizer/create/')">创建桌面</a>
+          <modal id="createtab_rightkey" :show.sync="zoomModal['createtab']" effect="zoom" class="nofoot">
+            <div slot="modal-header" class="modal-header">
+              <button type="button" class="modal-btn close" @click="close($event,'createtab')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+              <button type="button" class="modal-btn maxify" @click="max($event,'createtab')"><span  v-if='!ismax["createtab"]' class="glyphicon glyphicon-unchecked"></span>
+              <span v-if="ismax['createtab']" class="glyphicon glyphicon-modal-window"></span></button>
+              <button type="button" class="modal-btn minify" @click="min($event,'createtab')"><span class="glyphicon glyphicon-minus"></span></button>
+              <h4 class="modal-title">
+                <b>增加桌面</b>
+              </h4>
+            </div>
+            <div slot="modal-body" class="modal-body background-select">
+              
+            </div>
+          </modal>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#">右键功能测试</a></li>
+        <li><a href="#">右键功能测试</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#">右键功能测试</a></li>
+      </ul>
+    </div>
+    <!--alert-->
+    <div class="alerts" id="alerts">
+      <alert
+        :show.sync="showTop"
+        :duration="3000"
+        v-bind:type="type"
+        width="400px"
+        placement="top-right"
+        dismissable>
+        <span class="glyphicon glyphicon-ok-sign" v-if="type=='success'"></span>
+        <span class="glyphicon glyphicon-question-sign" v-if="type=='warning'"></span>
+        <span class="glyphicon glyphicon-info-sign" v-if="type=='info'"></span>
+        <span class="glyphicon glyphicon-exclamation-sign" v-if="type=='danger'"></span>
+        <strong v-cloak><%label[type]%></strong>
+        <p v-cloak><%content%></p>
+      </alert>
+    </div>
+    <div id="app">
+      <div id="main">
+        <!--顶部开始菜单栏-->
+        <div class="header">
+          <div class="user-logo">
+              <img src="{{STATIC_URL}}images/avator.png" alt="头像">
+          </div>
+          <div class="header-menu">
+            <div class="right-menu" id="logout">
+                <div class="input-group">
+                    <div class="input-group-addon"><a href="/docs"><span>使用文档 </span></a>
+                    </div>
+                </div>
+                <div class="input-group">
+                  <div class="input-group-addon"><span id="current_date" v-cloak><%time%></span><i style="margin-left:10px" class="glyphicon glyphicon-calendar"></i>  
+                  </div>
+                </div>
+                <div class="user-logo logout" title="退出登录">
+                    <a href="/logout"><span class="glyphicon glyphicon-off"></span></a>
+                </div>
+            </div>
+            <div class="left-menu" id="usetting">
+              <dropdown>
+                <button type="button" class="btn btn-default dropdown-toggle hundred" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  开始菜单 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu hundred"  data-step="1" data-intro="点击进入用户管理界面，先创建用户">
+                  {% for p,v in desktop.menu.items %}
+                    <li>
+                    <a @click="show($event,'{{p}}')" target="startiframe_{{p}}" v-cloak>{{v.name}}</a>
+                    <modal id="{{p}}_manage" :show.sync="{{v.zooms}}" effect="zoom">
+                      <div slot="modal-header" class="modal-header">
+                          <button type="button" class="modal-btn close" @click="close($event,'{{p}}')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+                          <button type="button" class="modal-btn maxify" @click="max($event,'{{p}}')">
+                          <span  v-if="!ismax['{{p}}']" class="glyphicon glyphicon-unchecked"></span>
+                          <span v-if="ismax['{{p}}']" class="glyphicon glyphicon-modal-window"></span></button>
+                          <button type="button" class="modal-btn minify" @click="min($event,'{{p}}')"><span  class="glyphicon glyphicon-minus"></span></button>
+                        <h4 class="modal-title">
+                            <b v-cloak>{{v.name}}</b>
+                        </h4>
+                      </div>
+                      <div slot="modal-body" class="modal-body">
+                        {% ifequal p 'platforms' %}
+                        {% include "menu/platforms-manage.html" %}
+                        {% endifequal %}
+
+                        {% ifequal p 'apps' %}
+                        {% include "menu/apps-manage.html" %}
+                        {% endifequal %}
+                        
+                        {% ifequal p 'nodes' %}
+                        {% include "menu/nodes-manage.html" %}
+                        {% endifequal %}
+
+                        {% ifequal p 'users' %}
+                        {% include "menu/user-manage.html" %}
+                        {% endifequal %}
+
+                        {% ifequal p 'roles' %}
+                        {% include "menu/roles-manage.html" %}
+                        {% endifequal %}
+
+                      </div>
+                    </modal>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </dropdown>
+              <div class="input-group" style="margin-top: -2px;">
+                  <div class="input-group-addon">当前用户: <span class="badge">{{user.name}}</span></div>
+              </div>
+              <div class="input-group">
+                  <div class="input-group-addon"> 当前登陆IP: <span id="current_ip">{{addr}}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--底部Dock-->
+        <div class="dock-outer" id="dock">
+          <div class="sidebar">
+          </div>
+          <div class="centerd">
+              <ul id="desktop">
+                <!--公用app-->
+                <li v-for="item in apps | orderBy 'pageid'" data-id="<%item.pageid%>" track-by="pageid" @click="callswitchpage(item.pageid)" v-bind:class="{'current_con':$index==(currentpage-1)?true:false}">
+                  <tooltip
+                    effect="scale"
+                    placement="top"
+                    v-bind:content="item.name">
+                    <img v-bind:src="item.icon">
+                  </tooltip>
+                  <div class="bottom_tip" v-if="$index==(currentpage-1)"><div class="ci_item current_con"></div></div>
+                </li>
+                <!--已打开的app最小化-->
+                <li v-if="minifys.length>0" class="v-cut-line"></li>
+                <li v-for="item in minifys" data-target="<%item.target%>" @click="toggleMin($event,item)" v-bind:class="{'flop':isflop[$index]}" class="desk-mini">
+                  <tooltip
+                    effect="scale"
+                    placement="top"
+                    v-bind:content="item.name">
+                    <img v-bind:src="item.icon" v-bind:title="item.name">
+                  </tooltip>
+                  <!-- <span><%item.name%></span> -->
+                </li>
+              </ul>
+          </div>
+        </div>
+        <div class="containers">
+          <div class="arrows">
+            <div class="arrows_left"><i class="glyphicon glyphicon-triangle-left"></i></div>
+            <div class="arrows_right"><i class="glyphicon glyphicon-triangle-right"></i></div>
+          </div>
+          <div class="container_items" id="applications">
+            <div class="container_item"  v-for="p in page | orderBy 'pageid'" track-by="pageid" data-id="<%p.pageid%>">
+              <div class="app" v-for="item in apps" v-if="item.formid==p.pageid" id="app<%$index%>" @click="show($event,$index,item.appid)">
+                <a><img v-bind:src="item.icon"></a>
+                <span v-cloak><%item.name%></span>
+                <modal id="appmodal<%$index%>" :show.sync="zooms[$index]" data-pageid="<%p.pageid%>" data-appid='<%item.appid%>' effect="zoom"  class="nofoot">
+                  <div slot="modal-header" class="modal-header" >
+                    <button type="button" class="modal-btn close" @click="close($event,$index)" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+                    <button type="button" class="modal-btn maxify" @click="max($event,$index)"><span v-if="!ismax[$index]" class="glyphicon glyphicon-unchecked"></span>
+                    <span v-if="ismax[$index]" class="glyphicon glyphicon-modal-window"></span></button>
+                    <button type="button" class="modal-btn minify" @click="min($event,$index)"><span  class="glyphicon glyphicon-minus"></span></button>
+                    <h4 class="modal-title">
+                      <b v-cloak><%item.name%></b>
+                    </h4>
+                  </div>
+                  <div v-if="item.appid!='1'" slot="modal-body" class="modal-body">
+                  </div>
+                  <div class="modal-body" slot="modal-body" v-if="item.appid=='1'">
+                    {% include "common/cmdb-manage.html" %}
+                  </div>
+                </modal>
+              </div>
+              <div class="app add-app" id="app999<%p.pageid+1%>" @click="show($event,'999_'+(p.pageid+1))">
+                <a target="appiframe999<%p.pageid+1%>"><img src="{{STATIC_URL}}images/app-icons/add-app1.png"></a>
+                <span>创建应用</span>
+                <modal id="appmodal999_<%p.pageid+1%>" :show.sync="zoomadd" effect="zoom" data-appid='<%item.appid%>'  data-pageid="<%p.pageid%>">
+                  <div slot="modal-header" class="modal-header">
+                    <button type="button" class="modal-btn close" @click="close($event,'999_'+(p.pageid+1))" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+                    <button type="button" class="modal-btn maxify" @click="max($event,'999_'+(p.pageid+1))"><span v-if="!ismaxadd[p.pageid]" class="glyphicon glyphicon-unchecked"></span>
+                    <span v-if="ismaxadd[p.pageid]" class="glyphicon glyphicon-modal-window"></span></button>
+                    <button type="button" class="modal-btn minify" @click="min($event,'999_'+(p.pageid+1))"><span  class="glyphicon glyphicon-minus"></span></button>
+                    <h4 class="modal-title">
+                      <b>增加应用</b>
+                    </h4>
+                  </div>
+                  <div slot="modal-body" class="modal-body">
+
+                  </div>
+                </modal>
+              </div>
+            </div>
+            <!-- <div class="container_item">
+              <div class="app" id="app1">
+                
+              </div>
+              <div class="app"></div>
+              <div class="app"></div>
+              <div class="app"></div>
+            </div>
+            <div class="container_item">
+              <div class="app"></div>
+            </div>
+            <div class="container_item">
+              <div class="app"></div>
+              <div class="app"></div>
+              <div class="app"></div>
+              <div class="app"></div>
+              <div class="app"></div>
+              <div class="app"></div>
+            </div> -->
+          </div>
+        </div>
+        <!-- <div  class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="modal-btn close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+                <button type="button" class="modal-btn minify"><span class="glyphicon glyphicon-unchecked"></span></button>
+                <button type="button" class="modal-btn maxify"><span class="glyphicon glyphicon-minus"></span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+              </div>
+              <div class="modal-body">
+              </div>
+            </div>
+          </div>
+        </div> -->
+       </div> 
+    </div>
+    <div class="loading">
+      <img src="{{STATIC_URL}}images/app-icons/ccc.gif" alt="">
+    </div>
+    {% include "common/jslink.html" %}
+    <script id="desktop">
+    {% include "userdata/desktop.js" %}
+    </script>
+    <script src="{{STATIC_URL}}js/startmenu/startmenumain.js"></script>
+    <script src="{{STATIC_URL}}js/appchild/appchildmain.js"></script>
+    <script>
+        // var ajaxBack = $.ajax;
+        // var ajaxCount = 0;
+        // var allAjaxDone = function(setting,data,status){
+        //     // console.log(setting,data,status)
+        //     if(data.responseText.indexOf("!DOCTYPE")>-1&&data.responseText.indexOf("top_div")>-1){
+        //         location.href = "/login?next="
+        //     }
+        // } //一行代码，就可以知道所有ajax请求什么时候结束
+        // //由于get/post/getJSON等，最后还是调用到ajax，因此只要改ajax函数即可
+        // $.ajax = function(setting){
+        //     ajaxCount++;
+        //     var cb = setting.complete;
+        //     setting.complete = function(data,status){
+        //         if($.isFunction(cb)){cb.apply(setting.context, arguments);}
+        //         ajaxCount--;
+        //         if(ajaxCount==0 && $.isFunction(allAjaxDone)){
+        //             allAjaxDone(setting,data,status);
+        //         }
+        //     }
+        //     ajaxBack(setting);
+        // }
+    </script>
+  </body>
+</html>

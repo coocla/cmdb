@@ -1,0 +1,50 @@
+{% load poll_extras %}
+{% if form.errors %}
+{{form.non_field_errors}}
+{% endif %}
+{% if forms.errors %}
+{{forms.non_field_errors}}
+{% endif %}
+
+<div>
+<form class="form-horizontal" role="form" action="{{url}}" method="post">
+{% for field in form.visible_fields %}
+    <div class="form-group">
+        {{field|label_attr:"col-lg-4 control-label"}} 
+        <div class="col-lg-8">
+            {{field}}
+            {{field.help_text}} {% if field.field.required %}<span style="color:red">*</span>{% endif %}
+        </div>
+    </div>
+{% endfor %}
+
+{{ forms.management_form }}
+{% for form in forms.forms %}
+<div class='table widget-content'>
+  <ul class="workflows">
+      <li>
+     {% for field in form %}
+     {% if field.is_hidden %}
+     {{field|label_style:"display:none"}}
+     {{field}}
+     {% else %}
+            <div class="form-group col-xs-6">
+                {{field|label_attr:"col-md-4 control-label"}}
+                <div class="col-md-8">
+                    {{field}}
+                    {{field.help_text}} {% if field.field.required %}<span style="color:red">*</span>{% endif %}
+                </div>
+            </div>
+     {% endif %}
+     {% endfor %}
+     <div class="clearfix"></div>
+     <button class="btn btn-default move_widget" type="button" title="点击拖动排序"><i class="glyphicon glyphicon-move"></i></button>
+     <button class="btn btn-default delete_widget" type="button" title="删除此步骤"><i class="glyphicon glyphicon-trash"></i></button>
+     </li>
+  </ul>
+</div>
+{% endfor %}
+<input type="button" value="添加步骤" id="add_more">
+<input type='submit' class="btn btn-primary postworkflow" value="提交">
+</form>
+</div>

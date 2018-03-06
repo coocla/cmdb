@@ -1,0 +1,27 @@
+---
+# Install and config rabbitmq for rabbitmq.yaml
+- hosts: "{{host}}"
+  gather_facts: False
+  remote_user: root
+  tasks:
+  - name: Install rabbitmq-server
+    yum: name=rabbitmq-server state=installed
+  - name: Start rabbitmq-server
+    service: name=rabbitmq-server state=started
+  - name: Install rabbitmq-plugins
+    rabbitmq_plugin: name=rabbitmq_management state=enabled
+    notify: restart rabbitmq-server
+  - name: Create rabbitmq-vhost
+    rabbitmq_vhost: name={{rabbitmq_vhost}} state=present
+  - name: Create rabbitmq-user
+    rabbitmq_user: user={{queue_username}}
+                   password={{queue_password}}
+                   state=present
+                   permissions=[{vhost={{rabbitmq_vhost}}, configure_priv='.*', read_priv='.*', write_priv='.*'}]
+  - name: Delete rabbitmq-guest-user
+    rabbitmq_user: user=guest
+                   vhost=/
+                   state=absent
+  handlers:
+  - name: restart rabbitmq-server
+    service: name=rabbitmq-server state=restarted enabled=yes

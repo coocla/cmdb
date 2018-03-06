@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-xs-8">
+    <button class="btn btn-default" @click="show($event,'addnode')"  data-step="2" data-intro="点击创建用户">增加节点</button>
+    <modal id="addnode_manage" :show.sync="zooms['addnode']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'addnode')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'addnode')">
+          <span  v-if="!ismax['addnode']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['addnode']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'addnode')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>增加节点</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body background-select"  data-step="3" data-intro="请填写表单，完成创建而后授权应用" data-hintPosition="top-left">
+      </div>
+    </modal>
+  </div>
+  <div class="col-xs-4">
+      <div class="input-group panel">
+         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+         <input type="text" class="form-control search-input" id="nodesearch" placeholder="">
+       </div>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+      <table id="nodetable"
+             data-toolbar="#toolbar"
+             data-show-refresh="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             data-minimum-count-columns="2"
+             data-show-pagination-switch="true"
+             data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+             data-id-field="id"
+             data-page-list="[15, 30, 50, 100, ALL]"
+             data-show-footer="false"
+             ><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+      </table>
+  </div>
+</div>
+<script>
+ 
+  // ajaxPage("{{STATIC_URL}}js/startmenu/user-manage.js");
+  
+</script>
+
+<!--<script>
+    // window.operateEvents = {
+    //     'click .like': function (e, value, row, index) {
+    //         alert('You click like action, row: ' + JSON.stringify(row));
+    //     },
+    //     'click .remove': function (e, value, row, index) {
+    //         $table.bootstrapTable('remove', {
+    //             field: 'id',
+    //             values: [row.id]
+    //         });
+    //     }
+    // };
+
+    
+</script>-->

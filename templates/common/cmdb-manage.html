@@ -1,0 +1,48 @@
+<div class="plat-sidebar" id="suit-left">
+	<div class="left-nav" id="left-nav">
+	        <ul>
+	        	<li v-for="c in cmdbtab" data-target="<%c.en%>" data-url="<%c.url%>" class="<%$index==0?'active':''%>">
+	        		<a><i class="<%c.icon%>"></i><%c.name%></a>
+	        		<div id="instance_tree" class="wstree" v-if="c.en=='instance'"></div>
+	        		<div id="location_tree" class="wstree" v-if="c.en=='location'"></div>
+	        	</li>
+	        </ul>
+      </div>
+</div>
+<div class="mainbar" style="border-left:none;">
+	<div v-for="c in cmdbtab" data-tab="<%c.en%>"  v-if="c.en==cmdbactive">
+		<div v-if="cmdbactive=='dashboard'">
+			{% include "cmdb/dashboard.html"%}
+		</div>
+		<div v-if="cmdbactive=='instance'">
+			{% include "cmdb/cmdbtree.html"%}
+		</div>
+		<div v-if="cmdbactive=='location'">
+			{% include "cmdb/cmdbtree.html"%}
+		</div>
+		<div v-if="cmdbactive=='group'">
+			{% include "cmdb/group.html"%}
+		</div>
+		<div v-if="cmdbactive=='accelerate'">
+			{% include "cmdb/accelerate.html"%}
+		</div>
+		<div v-if="cmdbactive=='division'">
+			{% include "cmdb/division.html"%}
+		</div>
+		<div v-if="cmdbactive=='idc'">
+			{% include "cmdb/idc.html"%}
+		</div>
+		<div v-if="cmdbactive=='cdn'">
+			{% include "cmdb/cdn.html"%}
+		</div>
+		<div v-if="cmdbactive=='contract'">
+			{% include "cmdb/contract.html"%}
+		</div>
+		<div v-if="cmdbactive=='domain'">
+			{% include "cmdb/domain.html"%}
+		</div>
+		<div v-if="cmdbactive=='resolve'">
+			{% include "cmdb/resolve.html"%}
+		</div>
+	</div>
+</div>

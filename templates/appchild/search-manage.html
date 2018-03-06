@@ -1,0 +1,51 @@
+<div id="searchdom">
+    <div class="row">
+        <div class="col-xs-6 col-md-4">
+            <div class="well">
+                <h2>服务器数量： <small>130</small></h2>
+                <h2>区服数量： <small>300</small></h2>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-4">
+            <div class="well"></div>
+        </div>
+        <div class="col-xs-6 col-md-4">
+            <div class="well"></div>
+        </div>
+    </div>
+
+    <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center"><h3>搜索IP、区服、状态</h3></div>
+        <div class="col-md-8 col-md-offset-2 panel-body">
+            <v-select :value.sync="arr" :options="fruitOptions" :search="true" placeholder="搜索位置" class="hundrd">
+            </v-select>
+        </div>
+    </div>
+
+    <!-- Columns are always 50% wide, on mobile and desktop -->
+    <div class="row">
+      <div class="col-xs-10 col-md-offset-1">
+        <div class="input-group panel">
+             <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+             <input type="text" class="form-control search-input" id="exampleInputAmount" placeholder="IP">
+           </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-md-offset-1">
+            <div class="input-group panel">
+                 <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+                 <input type="text" class="form-control search-input" id="exampleInputAmount" placeholder="区服">
+               </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-md-offset-1">
+            <div class="input-group panel">
+                 <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+                 <input type="text" class="form-control search-input" id="exampleInputAmount" placeholder="状态">
+               </div>
+        </div>
+    </div>
+</div>

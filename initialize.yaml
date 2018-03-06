@@ -1,0 +1,136 @@
+- model: asset.Widgets
+  pk: 1
+  fields:
+      name: "区服总数概览"
+      clsname: "ZoneCount"
+      kind: 4
+- model: asset.Widgets
+  pk: 2
+  fields:
+      name: "服务器总数概览"
+      clsname: "InstanceCount"
+      kind: 4
+- model: asset.Widgets
+  pk: 3
+  fields:
+      name: "服务器状态占比"
+      clsname: "InstanceStatusAnaly"
+      kind: 1
+- model: asset.Widgets
+  pk: 4
+  fields:
+      name: "服务器来源分布"
+      clsname: "InstanceSourceAnaly"
+      kind: 1
+- model: asset.Widgets
+  pk: 5
+  fields:
+      name: "各应用服务器使用占比"
+      clsname: "InstanceAppAnaly"
+      kind: 1
+- model: asset.Widgets
+  pk: 6
+  fields:
+      name: "各平台服务器使用占比"
+      clsname: "InstancePlatAnaly"
+      kind: 1
+- model: asset.Widgets
+  pk: 7
+  fields:
+      name: "各部门服务器占比"
+      clsname: "InstanceDivisionAnaly"
+      kind: 1
+- model: asset.Widgets
+  pk: 8
+  fields:
+      name: "各IDC服务器占比"
+      clsname: "InstanceIDCAnaly"
+      kind: 1
+- model: surge.UserAccounts
+  pk: 932d4c3ae68e11e5bdde008ad2687023
+  fields:
+      name: "管理员"
+      account: "admin"
+      password: "dce6ad6a5d22fb631757702b9bfe6092"
+      is_admin: 1
+      apikey: "4a8f3a513cfc11e6b33c0059b44e8cec"
+      created_at: "2016-07-01 06:48:16"
+      is_active: 1
+- model: asset.Appmode
+  pk: 2b1e57353f6b11e6b7ec00130ce37e1e
+  fields:
+      name: "游戏服"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 5cd2cea63f6b11e6852e00bfbe45e688
+  fields:
+      name: "中心服"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 6caa214f3f6b11e6aba900639d8b0bc3
+  fields:
+      name: "测试服"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc572
+  fields:
+      name: "资源服"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc573
+  fields:
+      name: "日志服务器"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc574
+  fields:
+      name: "备份服务器"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc575
+  fields:
+      name: "跳板服务器"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc576
+  fields:
+      name: "代理服务器"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc577
+  fields:
+      name: "邮件服务器"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc578
+  fields:
+      name: "认证服务器"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc579
+  fields:
+      name: "标准化接口"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c7fc476
+  fields:
+      name: "监控服务器"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"
+- model: asset.Appmode
+  pk: 7a1d95353f6b11e6ae5f004a7c2f1f76
+  fields:
+      name: "虚拟化服务器"
+      create_user: "管理员"
+      created_at: "2016-07-01 06:48:16"

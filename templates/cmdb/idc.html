@@ -1,0 +1,136 @@
+<div class="row">
+  <div class="col-xs-8">
+    <p>资产管理<span style="margin:0 10px">></span>IDC管理</p>
+  </div>
+  <div class="col-xs-4">
+    <div class="col-md-12">
+      <div class="input-group panel">
+         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+         <input type="text" class="form-control search-input" id="idcsearch" placeholder="">
+       </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-default"  @click="show($event,'idccreate')">创建IDC</button>
+    <modal id="appmodalidccreate" :show.sync="zooms['idccreate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'idccreate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'idccreate')">
+          <span  v-if="!ismax['idccreate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['idccreate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'idccreate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>创建IDC</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+    <button v-if="cmdbs.idcupdate.url" class="btn btn-default"  @click="show($event,'idcupdate')">更新</button>
+    <modal id="appmodalidcupdate" :show.sync="zooms['idcupdate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'idcupdate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'idcupdate')">
+          <span  v-if="!ismax['idcupdate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['idcupdate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'idcupdate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>更新IDC</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+
+    <button class="btn btn-default"  @click="show($event,'cabinetcreate')">创建机柜</button>
+    <modal id="appmodalcabinetcreate" :show.sync="zooms['cabinetcreate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'cabinetcreate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'cabinetcreate')">
+          <span  v-if="!ismax['cabinetcreate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['cabinetcreate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'cabinetcreate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>创建机柜</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+
+    <button v-if="cmdbs.cabupdate.url" class="btn btn-default"  @click="show($event,'cabupdate')">更新机柜</button>
+    <modal id="appmodalcabupdate" :show.sync="zooms['cabupdate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'cabupdate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'cabupdate')">
+          <span  v-if="!ismax['cabupdate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['cabupdate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'cabupdate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>更新IDC</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12" style="overflow:hidden;">
+    <div id="logmainpage">
+      <div id="idccabinet" class="transition widget">
+          <div class="widget-head">
+            <div class="widget-icons pull-left">
+              <a ><i class="glyphicon glyphicon-remove"></i></a>
+            </div>  
+            <div class="pull-left">机柜</div>
+            <div class="clearfix"></div>
+          </div>              
+
+          <div class="widget-content">
+            <div class="padd logdetailout">
+                <table id="cabinet_table"
+                       data-toolbar="#toolbar"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-show-columns="true"
+                       data-show-export="true"
+                       
+                       data-minimum-count-columns="2"
+                       data-show-pagination-switch="true"
+                       data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+                       data-id-field="id"
+                       data-page-list="[15, 30, 50, 100, ALL]"
+                       data-show-footer="false"
+                       data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+                </table>
+                <div class="clearfix"></div>
+            </div>
+          </div>
+      </div>
+      <table id="idc_table"
+             data-toolbar="#toolbar"
+             data-show-refresh="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             
+             data-minimum-count-columns="2"
+             data-show-pagination-switch="true"
+             data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+             data-id-field="id"
+             data-page-list="[15, 30, 50, 100, ALL]"
+             data-show-footer="false"
+             data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+      </table>
+    </div>  
+  </div>
+</div>

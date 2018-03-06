@@ -1,0 +1,9 @@
+---
+# init instance
+- hosts: "{{host}}"
+  remote_user: root
+  gather_facts: False
+  tasks:
+  - name: Run importVMs script
+    environment: "{{runtime_env}}"
+    script: "{{basedir}}"/static/repo/importVMsInBatches.sh

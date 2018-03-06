@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-xs-8">
+    <p>资产管理<span style="margin:0 10px">></span>合同管理</p>
+  </div>
+  <div class="col-xs-4">
+    <div class="col-md-12">
+      <div class="input-group panel">
+         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+         <input type="text" class="form-control search-input" id="contractsearch" placeholder="">
+       </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-default"  @click="show($event,'contractcreate')">创建合同</button>
+    <modal id="appmodalcontractcreate" :show.sync="zooms['contractcreate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'contractcreate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'contractcreate')">
+          <span  v-if="!ismax['contractcreate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['contractcreate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'contractcreate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>创建合同</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+    <button v-if="cmdbs.contractupdate.url" class="btn btn-default"  @click="show($event,'contractupdate')">更新</button>
+    <modal id="appmodalcontractupdate" :show.sync="zooms['contractupdate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'contractupdate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'contractupdate')">
+          <span  v-if="!ismax['contractupdate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['contractupdate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'contractupdate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>更新合同</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+      <table id="contract_table"
+             data-toolbar="#toolbar"
+             data-show-refresh="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             
+             data-minimum-count-columns="2"
+             data-show-pagination-switch="true"
+             data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+             data-id-field="id"
+             data-page-list="[15, 30, 50, 100, ALL]"
+             data-show-footer="false"
+             data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+      </table>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-xs-8">
+    <p>资产管理<span style="margin:0 10px">></span>CDN管理</p>
+  </div>
+  <div class="col-xs-4">
+    <div class="col-md-12">
+      <div class="input-group panel">
+         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+         <input type="text" class="form-control search-input" id="acceleratesearch" placeholder="">
+       </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-default"  @click="show($event,'accecreate')">创建CDN</button>
+    <modal id="appmodalaccecreate" :show.sync="zooms['accecreate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'accecreate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'accecreate')">
+          <span  v-if="!ismax['accecreate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['accecreate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'accecreate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>创建CDN</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+    
+    <button class="btn btn-danger" v-if="deletebtn.acce" @click="removecdn('acce')">删除</button>
+
+    <button v-if="cmdbs.acceupdate.url" class="btn btn-default"  @click="show($event,'acceupdate')">更新</button>
+    <modal id="appmodalacceupdate" :show.sync="zooms['acceupdate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'acceupdate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'acceupdate')">
+          <span  v-if="!ismax['acceupdate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['acceupdate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'acceupdate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>更新CDN</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+      <table id="accelerate_table"
+             data-toolbar="#toolbar"
+             data-show-refresh="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             
+             data-minimum-count-columns="2"
+             data-show-pagination-switch="true"
+             data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+             data-id-field="id"
+             data-page-list="[15, 30, 50, 100, ALL]"
+             data-show-footer="false"
+             data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+      </table>
+  </div>
+</div>

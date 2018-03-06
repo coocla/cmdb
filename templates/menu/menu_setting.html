@@ -1,0 +1,54 @@
+<style type="text/css">
+	body{
+        background: rgb(243,243,243) url("{{STATIC_URL}}images/modal-back.png") repeat;
+		padding: 0;
+		border: 0;
+		overflow-y: auto;
+	}
+	.input-group.panel{
+		border-radius: 10px;
+	}
+	.container{
+		min-width: 960px!important;
+	}
+</style>
+<div class="row">
+	<div class="col-xs-6">
+		<form>
+			<fieldset>
+				<legend>修改头像</legend>
+				<div class="form-group">
+					<img src="{{STATIC_URL}}images/avator.png" alt="修改头像" class="center-block">
+				</div>
+				<div class="form-group">
+					<div class="col-lg-8">
+						<button class="btn btn-primary center-block">上传头像</button>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="col-xs-6">
+		<form>
+			<fieldset>
+			    <legend>密码修改</legend>
+			    <div class="form-group">
+			      <!-- <label class="col-lg-4 control-label">Password</label> -->
+			      <div class="col-lg-8">
+			        <input type="password" class="form-control" placeholder="旧密码">
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <div class="col-lg-8">
+			        <input type="password" class="form-control" placeholder="新密码">
+			      </div>
+			    </div>
+			    <div class="form-group">
+				    <div class="col-lg-8">
+				    	<button type="button" class="btn btn-primary">修改密码</button>
+				    </div>
+			    </div>
+		  	</fieldset>
+		</form>
+	</div>
+</div>

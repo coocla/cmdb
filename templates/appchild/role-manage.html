@@ -1,0 +1,51 @@
+<div class="row" id="rolemanage">
+  <div class="col-xs-8">
+    <button class="btn btn-default" id="<%common%>_addrole">添加角色</button>
+    <modal id="<%common%>_addrole_manage" :showp.sync="platzooms['addrole']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="closeplat($event,'addrole')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="maxplat($event,'addrole')">
+          <span  v-if="!platismax['addrole']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="platismax['addrole']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="minplat($event,'addrole')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b><%commontitle%>-添加角色</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+
+    <button class="btn btn-danger" v-if="deletebtn.approle" @click="removescs('approle')">删除</button>
+  </div>
+  <div class="col-xs-4">
+      <div class="input-group panel">
+         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+         <input type="text" class="form-control search-input" id="exampleInputAmount" placeholder="">
+       </div>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+      <table id="role_table"
+             data-toolbar="#toolbar"
+             data-show-refresh="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             
+             data-minimum-count-columns="2"
+             data-show-pagination-switch="true"
+             data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+             data-id-field="id"
+             data-page-list="[10, 25, 50, 100, ALL]"
+             data-show-footer="false"
+             data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+      </table>
+  </div>
+</div>
+<script>
+  // $.getScript("{{STATIC_URL}}js/appchild/role-manage.js");
+</script>

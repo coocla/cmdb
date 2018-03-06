@@ -1,0 +1,105 @@
+<div class="plat-sidebar">
+	<div id="tree" class="wstree">
+		
+	</div>
+</div>
+<div class="mainbar">
+	<div class="row">
+		<div class="col-xs-8">
+			<div class="btn-group">
+				      <button class="btn btn-default" v-for="cmd in hostcmds" @click="showp($event,'host_'+cmd.uuid)" id="<%cmd.uuid%>_btn"><%cmd.name%></button>
+				      <modal v-for="cmd in hostcmds" id="<%common%>_host_<%cmd.uuid%>_manage" :showp.sync="platzooms['host_'+cmd.uuid]" effect="zoom">
+				        <div slot="modal-header" class="modal-header">
+				            <button type="button" class="modal-btn close" @click="closeplat($event,'host_'+cmd.uuid)" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+				            <button type="button" class="modal-btn maxify" @click="maxplat($event,'host_'+cmd.uuid)">
+				            <span  v-if="!platismax['host_'+cmd.uuid]" class="glyphicon glyphicon-unchecked"></span>
+				            <span v-if="platismax['host_'+cmd.uuid]" class="glyphicon glyphicon-modal-window"></span></button>
+				            <button type="button" class="modal-btn minify" @click="minplat($event,'host_'+cmd.uuid)"><span  class="glyphicon glyphicon-minus"></span></button>
+				          <h4 class="modal-title">
+				              <b><%cmd.name%></b>
+				          </h4>
+				        </div>
+				        <div slot="modal-body" class="modal-body background-select">
+				        	<form class="form-horizontal" role="form">
+				        	    <div class="form-group">
+				        	        <label class="col-lg-4" for="id_name">单个步骤执行超时时间:</label> 
+				        	        <div class="col-lg-8">
+				        	        <input class="form-control" name="timeout" type="text" value="600">
+				        	        </div>
+				        	    </div>
+				        	    <div class="form-group">
+				        	    	<label class="col-lg-4">注入的变量</label>
+				        	    	<div class="col-lg-8">
+				        	    		<div class="envs" class="col-lg-12" v-for="it in envs"  style="margin-bottom: 10px;">
+					        	    		<div class="col-lg-4" style="padding:0;"><input class="key form-control" type="text"></div>
+											<div class="col-lg-1" style="text-align:center;font-size:20px;font-weight:blod;padding:0;">=</div>
+											<div class="col-lg-4" style="padding:0;"><input class="value form-control" type="text"></div>
+											<div class="col-lg-3" style="padding:0;">
+												<button type="button" style="float:left;" class="btn btn-primary" @click="addenvs()">
+													<i class="glyphicon glyphicon-plus"></i>
+												</button>
+												<button type="button" class="btn btn-danger" v-if="envs>1&&$index!=0"  @click="minusenvs()">
+													<i class="glyphicon glyphicon-minus"></i>
+												</button>	
+											</div>
+											<div class="clearfix"></div>
+				        	    		</div>
+				        	    	</div>
+				        	    </div>
+
+				        	    <div class="form-group">
+				        	    	<label class="col-lg-4">是否为定时任务</label>
+				        	    	<div class="col-lg-8">
+				        	    		<input type="radio" name="istimetask" value="1" @click="changetimeout(true,cmd.uuid)">是
+				        	    		<input type="radio" name="istimetask" checked="checked" value="0" @click="changetimeout(false,cmd.uuid)">否
+				        	    	</div>
+				        	    </div>
+								<div class="form-group" v-if="istimeout">
+									<label class="col-lg-4">时间表达式</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" id="timecron" name="timecron">
+									</div>
+								</div>
+								<div class="form-group"  v-if="istimeout">
+									<label class="col-lg-4">任务名称</label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control" name="name">
+									</div>
+								</div>
+
+				        	    <input type="button" @click="initcmd($event,cmd.uuid,'host')" class="btn btn-primary" value="提交">
+				        	</form>
+				        </div>
+				      </modal>
+			</div>
+		</div>
+	  <div class="col-xs-4">
+	    <div class="col-md-12">
+	      <div class="input-group panel">
+	         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+	         <input type="text" class="form-control search-input" id="apphostsearch" placeholder="">
+	       </div>
+	    </div>
+	  </div>
+	</div>
+	<hr>
+	<div class="row">
+	  <div class="col-xs-12">
+	      <table id="hosttable"
+	             data-toolbar="#toolbar"
+                 data-show-refresh="true"
+                 data-show-toggle="true"
+                 data-show-columns="true"
+                 data-show-export="true"
+                 
+                 data-strict-search="true"
+                 data-minimum-count-columns="2"
+                 data-show-pagination-switch="true"
+                 data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+                 data-id-field="id"
+                 data-page-list="[15, 30, 50, 100, ALL]"
+                 data-show-footer="false"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+	      </table>
+	  </div>
+	</div>
+</div>

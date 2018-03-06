@@ -1,0 +1,121 @@
+<style>
+.bs-callout{padding:20px;margin:20px 0;border:1px solid #eee;border-left-width:5px;border-radius:3px}.bs-callout h4{margin-top:0;margin-bottom:5px}.bs-callout p:last-child{margin-bottom:0}.bs-callout code{border-radius:3px}.bs-callout+.bs-callout{margin-top:-5px}.bs-callout-danger{border-left-color:#ce4844}.bs-callout-danger h4{color:#ce4844}.bs-callout-warning{border-left-color:#aa6708}.bs-callout-warning h4{color:#aa6708}.bs-callout-info{border-left-color:#1b809e}.bs-callout-info h4{color:#1b809e}
+</style>
+<div class="row" id="logmanage">
+  <div class="col-xs-8">
+    <div class="btn-group" id="filterlog">
+        <button class="btn btn-primary" data-type="all">全部</button>
+        <button class="btn btn-default" data-type="1">未执行</button>
+        <button class="btn btn-default" data-type="2">正在执行</button>
+        <button class="btn btn-default" data-type="3">手动结束</button>
+        <button class="btn btn-default" data-type="4">执行失败</button>
+        <button class="btn btn-default" data-type="5">执行成功</button>
+        <button class="btn btn-default" data-type="6">步骤终止</button>
+        <button class="btn btn-default" data-type="7">执行超时</button>
+    </div>
+
+    <button class="btn btn-danger" id="closetask">关闭任务</button>
+  </div>
+  <div class="col-xs-4">
+      <div class="input-group panel">
+         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+         <input type="text" class="form-control search-input" id="exampleInputAmount" placeholder="">
+       </div>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12" style="overflow:hidden;">
+    <div id="logmainpage" class="transition">
+      <div id="logdetail" class="transition widget">
+          <div class="widget-head">
+            <div class="widget-icons pull-left">
+              <a ><i class="glyphicon glyphicon-remove"></i></a>
+            </div>  
+            <div class="pull-left">日志详情</div>
+            <div class="clearfix"></div>
+          </div>              
+
+          <div class="widget-content">
+            <div class="padd logdetailout">
+                <div class="logfirst" id="logworkflow">
+                      <legend>所有步骤执行结果</legend>
+                      <ul class="log-workflow" id="log-workflow">
+                        <li  v-for="item in steps | orderBy 'stepid'" track-by="stepid">
+                          <div class="pull-left">
+                            <i v-if="item.status!=1&&item.status!=5" class="log-workflow-number danger"><%item.stepid%></i>
+                            <i v-if="item.status==1" class="log-workflow-number warning"><%item.stepid%></i>
+                            <i v-if="item.status==5" class="log-workflow-number success"><%item.stepid%></i>
+                          </div>
+                          <div class="workflow-content">
+                            <h3>步骤名称：<b><%item.name%></b></h3>
+                            <p>执行状态：<b><%item.state%></b></p>
+                            <p><a @click="getLogTwo(item.url)">查看详情</a></p>
+                          </div>
+                        </li>
+                      </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+          </div>
+      </div>
+      <div class="widget transition" id="logdetail-two">
+        <div class="widget-head">
+          <div class="widget-icons pull-left">
+            <a><i class="glyphicon glyphicon-remove"></i></a>
+          </div>
+          <div class="pull-left">单个机器详情</div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="widget-content">
+          <div class="padd">
+            <div class="logtwo pull-left">
+                <table id="log_two_table" style="width:100%"
+                       data-minimum-count-columns="2"
+                       data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+                       data-id-field="id"
+                       data-page-list="[15, 30, 50, 100, ALL]"
+                       data-show-footer="false"
+                       data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+                </table>
+            </div>
+            <div class="loglog" id="loglog" style="margin-top:-20px">
+            </div>
+          </div>
+        </div>
+      </div>
+      <table id="log_table" style="width:100%"
+             data-toolbar="#toolbar"
+             data-show-refresh="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             
+             data-minimum-count-columns="2"
+             data-show-pagination-switch="true"
+             data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+             data-id-field="id"
+             data-page-list="[15, 30, 50, 100, ALL]"
+             data-show-footer="false"
+             data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+      </table>
+    </div>  
+  </div>
+</div>
+<!-- <div id='logdetail' class="transition widget">
+    <div class="widget-head">
+      <div class="widget-icons pull-left">
+        <a ><i class="glyphicon glyphicon-remove"></i></a>
+      </div>  
+      <div class="pull-left">日志详情</div>
+      <div class="clearfix"></div>
+    </div>              
+
+    <div class="widget-content">
+      <div class="padd logdetailout">
+          <div class="logfirst"></div>
+          <div class="logtwo"></div>
+          <div class="clearfix"></div>
+      </div>
+    </div>
+</div> -->

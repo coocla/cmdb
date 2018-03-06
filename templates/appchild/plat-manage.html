@@ -1,0 +1,49 @@
+<div class="row" id="platmanage">
+  <div class="col-xs-8">
+    <button class="btn btn-default" id="<%common%>_addplatgamebtn">上/下线平台</button>
+    <modal id="<%common%>_addplattogame_manage" :showp.sync="platzooms['addplattogame']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="closeplat($event,'addplattogame')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="maxplat($event,'addplattogame')">
+          <span  v-if="!platismax['addplattogame']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="platismax['addplattogame']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="minplat($event,'addplattogame')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b><%commontitle%>-上/下线平台</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+  
+      </div>
+    </modal>
+  </div>
+  <div class="col-xs-4">
+      <div class="input-group panel">
+         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+         <input type="text" class="form-control search-input" id="exampleInputAmount" placeholder="">
+       </div>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+      <table id="plat_table"
+             data-toolbar="#toolbar"
+             data-show-refresh="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             
+             data-minimum-count-columns="2"
+             data-show-pagination-switch="true"
+             data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+             data-id-field="id"
+             data-page-list="[15, 30, 50, 100, ALL]"
+             data-show-footer="false"
+             data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+      </table>
+  </div>
+</div>
+<script>
+	// $.getScript("{{STATIC_URL}}js/appchild/plat-manage.js")
+</script>

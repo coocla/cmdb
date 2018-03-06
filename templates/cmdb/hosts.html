@@ -1,0 +1,45 @@
+{% load poll_extras %}
+{% if form.errors %}
+{{form.non_field_errors}}
+{% endif %}
+
+{% if form.has_file %}
+<form class="form-horizontal" role="form" action="{{url}}" method="post" enctype="multipart/form-data">
+{% else %}
+<form class="form-horizontal" role="form" action="{{url}}" method="post">
+{% endif %}
+    {% for field in form.visible_fields %}
+    <div class="form-group">
+        {{field|label_attr:"col-lg-4 control-label"}} 
+        <div class="col-lg-8">
+        {{field}}
+        {{field.help_text}} {% if field.field.required %}<span style="color:red">*</span>{% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    <input type='submit' class="btn btn-primary" value="提交">
+</form>
+
+<script type="text/javascript">
+function getCabinet(idc_id){
+    $.ajax({
+        type: "GET",
+        url: "/api/getcabinet?idc_id="+idc_id,
+        dataType: 'json',
+        success: function(result,textStatus){
+            var cabinetSelect = document.getElementById("id_idc_cabinet");
+            for(var i=cabinetSelect.options.length-1;i>-1; i--){
+                cabinetSelect[i] = null;
+            }
+            var data=result.results;
+            if(data.length>0){
+                for(i=0;i<data.length;i++){
+                    cabinetSelect.options[i] = new Option();
+                    cabinetSelect.options[i].text = data[i].name;
+                    cabinetSelect.options[i].value = data[i].uuid;
+                }
+            }
+        }
+    })
+}
+</script>

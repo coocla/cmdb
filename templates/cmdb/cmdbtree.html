@@ -1,0 +1,248 @@
+<style>
+.bs-callout{padding:20px;margin-top:-20px;border:1px solid #eee;border-left-width:5px;border-radius:3px}.bs-callout h4{margin-top:0;margin-bottom:5px}.bs-callout p:last-child{margin-bottom:0}.bs-callout code{border-radius:3px}.bs-callout+.bs-callout{margin-top:-5px}.bs-callout-danger{border-left-color:#ce4844}.bs-callout-danger h4{color:#ce4844}.bs-callout-warning{border-left-color:#aa6708}.bs-callout-warning h4{color:#aa6708}.bs-callout-info{border-left-color:#1b809e}.bs-callout-info h4{color:#1b809e}
+</style>
+<div class="row">
+  <div class="col-xs-8">
+      <p>资产管理<span style="margin:0 10px">></span>资产</p>
+  </div>
+  <div class="col-xs-4">
+    <div class="col-md-12">
+      <div class="input-group panel">
+         <div class="input-group-addon search-addon"><span class="glyphicon glyphicon-search"></span></div>
+         <input type="text" class="form-control search-input" id="assetsearch" placeholder="">
+       </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12" id="buttons">
+    <button class="btn btn-default" @click="show($event,'cmdbentry')" v-if="entryshow">录入</button>
+    <modal id="appmodalcmdbentry" :show.sync="zooms['cmdbentry']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'cmdbentry')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'cmdbentry')">
+          <span  v-if="!ismax['cmdbentry']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['cmdbentry']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'cmdbentry')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>录入</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          <div class="padd logdetailout customtab">
+              <ul class="nav nav-tabs">
+                <li class="active" data-target="#duotai"><a>多台录入</a></li>
+                <li data-target="#dantai"><a>单台录入</a></li>
+                <li data-target="#shoudong"><a>手动填写</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="duotai">
+                  <div class="padd"></div>
+                  提示：当前服务器会通过SSH登录EXCEL列表中的主机, 并自动安装Agent. 请注意你的SSHD服务的安全策略, 否则会影响主机录入和Agent安装!
+                </div>
+                <div class="tab-pane" id="dantai" style="padding-top: 20px;">
+                    <form method="post" action="/cmdb/hosts/bulk/input" role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="id_idc_uuid" class="col-lg-4 control-label">所属机房:</label> 
+                        <div class="col-lg-8">
+                            <select name="idc_uuid" id="id_idc_uuid" onchange="GetImportCode('cmdbentry',this)" class="form-control">
+                                <option selected="selected" value="">---------</option>
+                                <option v-for="idc in entryidcs" value='<%idc.uuid%>'><%idc.idc_region%></option>
+                            </select>
+                            <span style="color:red">*</span>
+                        </div>
+                    </div>
+                    </form>
+                    <div class="padd"></div>
+                    此命令会在所执行的主机上安装 Agent 并录入服务器基本信息，安装完成后, 请在闲置池中查看导入的主机. 安装日志在: /root/surge-install-agent.log
+                </div>
+                <div class="tab-pane" id="shoudong">
+                    <div class="padd"></div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+          </div>
+      </div>
+    </modal>
+
+    <button class="btn btn-danger" v-if="deletebtn.hostdown" @click="removecdn('hostdown')">下架</button>
+
+
+    <button v-if="cmdbs.cmdbupdate.url&&cmdbs.cmdbupdate.url.indexOf('bulk')==-1" class="btn btn-default"  @click="show($event,'cmdbupdate')">更新</button>
+
+    <button v-if="cmdbs.cmdbupdate.url&&cmdbs.cmdbupdate.url.indexOf('bulk')>-1" class="btn btn-default"  @click="show($event,'cmdbupdate')">批量更新</button>
+    <modal id="appmodalcmdbupdate" :show.sync="zooms['cmdbupdate']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'cmdbupdate')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'cmdbupdate')">
+          <span  v-if="!ismax['cmdbupdate']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['cmdbupdate']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'cmdbupdate')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>更新</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          
+      </div>
+    </modal>
+
+    <button v-if="cmdbs.addmonitor.showif" class="btn btn-default"  @click="show($event,'addmonitor')">添加监控</button>
+    <modal id="appmodaladdmonitor" :show.sync="zooms['addmonitor']" effect="zoom">
+      <div slot="modal-header" class="modal-header">
+          <button type="button" class="modal-btn close" @click="close($event,'addmonitor')" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="modal-btn maxify" @click="max($event,'addmonitor')">
+          <span  v-if="!ismax['addmonitor']" class="glyphicon glyphicon-unchecked"></span>
+          <span v-if="ismax['addmonitor']" class="glyphicon glyphicon-modal-window"></span></button>
+          <button type="button" class="modal-btn minify" @click="min($event,'addmonitor')"><span  class="glyphicon glyphicon-minus"></span></button>
+        <h4 class="modal-title">
+            <b>添加监控</b>
+        </h4>
+      </div>
+      <div slot="modal-body" class="modal-body">
+          <form class="form">
+              <div class="form-group">  
+                    <label class="col-xs-4">全部模板</label>
+                    <div class="col-xs-8">  
+                        <v-select :value.sync="cmdbselectedtpl" :options="monitors.templates" :close-on-select="true" :multiple="true" :search="true">
+                        </v-select>
+                    </div>
+                    <div class="clearfix"></div>
+              </div>
+              <div class="form-group">  
+                    <label class="col-xs-4">监控代理</label>
+                    <div class="col-xs-8">  
+                        <v-select :value.sync="cmdbselectedproxy" :options="monitors.proxys" :close-on-select="true" :multiple="false" :search="true">
+                        </v-select>
+                    </div>
+                    <div class="clearfix"></div>
+              </div>
+              <div class="form-group">  
+                    <label class="col-xs-4">主机组</label>
+                    <div class="col-xs-8">  
+                        <v-select :value.sync="cmdbselectedgroup" :options="monitors.groups" :close-on-select="true" :multiple="false" :search="true">
+                        </v-select>
+                    </div>
+                    <div class="clearfix"></div>
+              </div>
+              <div class="form-group">  
+                    <input type="submit" class="btn btn-primary" value="确定">
+              </div>
+          </form>
+      </div>
+    </modal>
+
+    <button  class="btn btn-default" id="enablemonitor" v-if="cmdbs.enablemon.url">启用监控</button>
+    <button  class="btn btn-default" id="disablemonitor" v-if="cmdbs.enablemon.url">禁用监控</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12" style="overflow:hidden;">
+      <div id="logmainpage">
+        <div id="idccabinet" class="transition widget">
+            <div class="widget-head">
+              <div class="widget-icons pull-left">
+                <a ><i class="glyphicon glyphicon-remove"></i></a>
+              </div>  
+              <div class="pull-left">监控</div>
+              <div class="clearfix"></div>
+            </div>              
+
+            <div class="widget-content">
+              <div class="padd logdetailout customtab" id="monitortab">
+                  <ul class="nav nav-tabs">
+                    <li class="active" data-target="#monitopage"><a>监控图</a></li>
+                    <li data-target="#history"><a>操作历史</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="monitopage">
+                      <div class="btn-group form-group">
+                          <button type="button" @click="settimezone($event,3600)" class="btn btn-primary">1H</button>
+                          <button type="button" @click="settimezone($event,10800)" class="btn btn-default">3H</button>
+                          <button type="button" @click="settimezone($event,21600)" class="btn btn-default">6H</button>
+                          <button type="button" @click="settimezone($event,43200)" class="btn btn-default">12H</button>
+                          <button type="button" @click="settimezone($event,86400)" class="btn btn-default">1D</button>
+                          <button type="button" @click="settimezone($event,604800)" class="btn btn-default">7D</button>
+                          <button type="button" @click="settimezone($event,2592000)" class="btn btn-default">1M</button>
+                          <button type="button" @click="settimezone($event,7776000)" class="btn btn-default">3M</button>
+                          <button type="button" @click="settimezone($event,15552000)" class="btn btn-default">6M</button>
+                          <button type="button" @click="settimezone($event,31536000)" class="btn btn-default">12M</button>
+                      </div>
+                      <div class="input-group form-group" id="selecttimez">
+                        <input type="text" name="start" class="form-control" style="height:30px">
+                         <span class="input-group-addon">至</span>
+                         <input type="text" name="end" class="form-control" style="height:30px">
+                      </div>
+                      <div class="pubuimgs" id="pubuimgs" style="position:relative;width:100%;">
+                        <div class="monitorimg" v-for="img in monitorimg" style="min-height:260px">
+                          <h4><%img.name%></h4>
+                          <img v-bind:src="img.url" alt="">
+                        </div>
+                        
+                      </div>
+                    </div>
+                    <div class="tab-pane" id="history">
+                        <div class="inspinia-timeline">
+                          <div class="timeline-item" v-for="audit in cmdbselectedaudit">
+                            <div class="row">
+                                <div class="col-xs-3 date">
+                                  <small class="text-primary"><%audit.user%></small>
+                                  <br>
+                                  <i class="glyphicon glyphicon-time"></i>
+                                  <%audit.created_at%>
+                                </div>
+                                <div class="col-xs-9 content no-top-border">
+                                  <div class="row" v-for="(key,val) in audit.after">
+                                      <div class="col-sm-2" style="text-align:right;"><%key%></div>
+                                      <div class="col-sm-10">
+                                        从<small class="text-danger"><%audit.before[key]||'null'%></small>  <b><%audit.action%></b>  到<small class="text-success"><%audit.after[key]%></small>
+                                      </div>
+                                  </div>
+                                </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+              </div>
+            </div>
+        </div>
+      <table id="cmdb_table"
+             data-toolbar="#toolbar"
+             data-show-refresh="true"
+             data-show-toggle="true"
+             data-show-columns="true"
+             data-show-export="true"
+             
+             data-minimum-count-columns="2"
+             data-show-pagination-switch="true"
+             data-pagination="true" data-page-size="15" data-pagination-first-text="第一页" data-pagination-pre-text="上一页" data-pagination-next-text="下一页" data-pagination-last-text="最后一页"
+             data-id-field="id"
+             data-page-list="[15, 30, 50, 100, ALL]"
+             data-show-footer="false"
+             data-response-handler="responseHandler"><!--data-search="true" data-side-pagination="server" data-detail-formatter="detailFormatter"-->
+      </table>
+      </div>
+  </div>
+</div>
+
+<script>
+function GetImportCode(index,obj){
+    if(obj.value){
+        $.ajax({
+            url:"/cmdb/hosts/"+obj.value+"/input/",
+            method:"GET",
+            dataType:"html",
+            success:function(data){
+            $("#appmodal"+index).find("#dantai .padd").html('<div class="bs-callout bs-callout-info"><h4>请在到要导入的主机上以root用户执行以下命令: </h4><pre><code>'+data+'</code></pre></div>');
+            }
+        })
+    }else{
+        $("#appmodal"+index).find("#dantai .padd").html('<div class="bs-callout bs-callout-danger"><h4>请选择所属机房!</h4></div>');
+    }
+}
+</script>
