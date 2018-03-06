@@ -22,7 +22,7 @@ source ~/.bash_profile
 4. 获取源代码
 ```
 cd /opt
-git clone https://gitlab.opstack.cc/caozheng/surge.git
+git clone https://github.com/coocla/cmdb.git
 cd /opt/surge
 pyenv install 2.7.8
 ```
@@ -139,7 +139,7 @@ cp /opt/surge/etc/supervisord.conf  /etc/
     ZABBIX_PASSWORD = "ZABBIX_PASS"
     ```
 
-    > 替换`DOMAIN_NAME`为对外访问的地址,例: http://game.opstack.cc
+    > 替换`DOMAIN_NAME`为对外访问的地址,例: http://game.qq.com
     替换`ZABBIX_URL`为zabbix的访问地址
     替换`ZABBIX_USER`为访问zabbix的账户
     替换`ZABBIX_PASS`为访问zabbix的密码
